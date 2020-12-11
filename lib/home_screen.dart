@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_localization/controller/app_language.dart';
 
 /// local saved data
 class HomeScreen extends StatefulWidget {
@@ -34,23 +35,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 "SignUp".tr,
                 style: TextStyle(fontSize: 32),
               ),
-              DropdownButton(
-                items: [
-                  DropdownMenuItem(
-                    child: Text("en"),
-                    value: 'en',
-                  ),
-                  DropdownMenuItem(
-                    child: Text("ar"),
-                    value: 'ar',
-                  ),
-                ],
-                value: _selectedLang,
-                onChanged: (value) {
-                  setState(() {
-                    _selectedLang = value;
-                  });
-                  Get.updateLocale(Locale(_selectedLang));
+              GetBuilder<AppLanguage>(
+                init: AppLanguage(),
+                builder: (controller) {
+                  return DropdownButton(
+                    items: [
+                      DropdownMenuItem(
+                        child: Text("en"),
+                        value: 'en',
+                      ),
+                      DropdownMenuItem(
+                        child: Text("ar"),
+                        value: 'ar',
+                      ),
+                    ],
+                    value: controller.appLocale,
+                    onChanged: (value) {
+                      controller.changeLanguage(value);
+                      Get.updateLocale(Locale(value));
+                    },
+                  );
                 },
               )
             ],
